@@ -3231,36 +3231,21 @@
         .washi-corner { width: 54px; height: 18px; }
       }
 
-      /* 页首标题：毛茸茸风格——白色字、#8a6a4a 棕色四周描边（text-shadow）、轻微投影，站酷快乐体，大字号。 */
+      /* 页首标题：设计好的标题图（白字加可可色 #8a6a4a 描边、手写风，带日文副标题「犬と猫のベストフレンド」），图片居中，等比缩放。 */
       .journal-title {
-        position: relative;
-        width: fit-content;
         margin: 0 auto 20px;
-        padding: 4px 18px 8px;
-        color: #ffffff;
-        font-family: "ZCOOL KuaiLe", sans-serif;
-        font-size: 64px;
-        font-weight: 400;
-        line-height: 1.15;
-        letter-spacing: 4px;
         text-align: center;
-        text-shadow:
-          -3px -3px 0 #8a6a4a, 0 -3px 0 #8a6a4a, 3px -3px 0 #8a6a4a,
-          -3px 0 0 #8a6a4a, 3px 0 0 #8a6a4a,
-          -3px 3px 0 #8a6a4a, 0 3px 0 #8a6a4a, 3px 3px 0 #8a6a4a,
-          -2px -2px 0 #8a6a4a, 2px -2px 0 #8a6a4a,
-          -2px 2px 0 #8a6a4a, 2px 2px 0 #8a6a4a,
-          0 5px 8px rgba(90, 62, 34, 0.25);
+      }
+      .journal-title img {
+        display: block;
+        width: min(560px, 88vw);
+        height: auto;
+        margin: 0 auto;
       }
       .journal-title::before,
       .journal-title::after { content: none; }
       @media (max-width: 520px) {
-        .journal-title {
-          margin: 0 auto 16px;
-          padding: 2px 10px 7px;
-          font-size: 46px;
-          letter-spacing: 2px;
-        }
+        .journal-title { margin: 0 auto 16px; }
       }
     </style>
   </head>
@@ -3273,7 +3258,7 @@
       </filter>
     </svg>
     <main class="shell">
-      <h1 class="journal-title">毛球手帳</h1>
+      <h1 class="journal-title"><img src="images/title-v2.webp" alt="毛球手帳"></h1>
       <header class="intro">
         <div>
           <h1>四只狗的<span>健康档案</span></h1>
