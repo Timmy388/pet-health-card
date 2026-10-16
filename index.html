@@ -2830,9 +2830,407 @@
       .media-video-poster span { position: absolute; inset: 50% auto auto 50%; display: flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 999px; color: #fff; background: rgba(35,31,26,.88); font-size: .78rem; font-weight: 700; transform: translate(-50%, -50%); }
       .media-video-poster svg { width: 18px; height: 18px; fill: currentColor; }
       @media (max-width: 520px) { .media-video-shell { grid-column: 1 / -1; } }
+
+      /* 手帐二期：轻量和纸、翻页小册与朱红盖章 */
+      .book-tools {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin: 18px 0 10px;
+      }
+      .book-tools-label { color: var(--muted); font-size: .76rem; }
+      .book-share {
+        flex: 0 0 auto;
+        margin: 0;
+        padding: 9px 14px;
+        border: 1px dashed rgba(122,139,92,.48);
+        border-radius: 6px 11px 7px 9px;
+        color: var(--accent-deep);
+        background: rgba(255,253,248,.82);
+        font-size: .76rem;
+        font-weight: 700;
+        cursor: pointer;
+        transform: rotate(.4deg);
+      }
+      .book-share:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+      .booklet-nav {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0,1fr));
+        gap: 7px;
+        margin: 0 0 12px;
+        padding: 7px;
+        border: 1px solid rgba(122,139,92,.22);
+        border-radius: 14px 9px 16px 10px;
+        background: rgba(244,237,226,.78);
+      }
+      .booklet-nav button {
+        min-width: 0;
+        padding: 8px 6px;
+        border: 0;
+        border-radius: 7px 11px 6px 9px;
+        color: var(--muted);
+        background: transparent;
+        cursor: pointer;
+        line-height: 1.15;
+      }
+      .booklet-nav button strong { display: block; font-size: .7rem; }
+      .booklet-nav button span { display: block; margin-top: 3px; overflow: hidden; font-size: .66rem; text-overflow: ellipsis; white-space: nowrap; }
+      .booklet-nav button[aria-current="page"] { color: #704033; background: var(--journal-pink); box-shadow: 0 4px 12px rgba(91,72,43,.08); transform: rotate(-.7deg); }
+      .booklet-nav button:nth-child(2)[aria-current="page"],
+      .booklet-nav button:nth-child(5)[aria-current="page"] { color: var(--accent-deep); background: var(--journal-mint); transform: rotate(.7deg); }
+      .booklet-nav button:nth-child(3)[aria-current="page"] { background: var(--journal-cream); }
+      .booklet-nav button:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+
+      .booklet-stage {
+        position: relative;
+        min-width: 0;
+        min-height: 460px;
+        border-radius: 30px 20px 32px 19px;
+        background: #fffaf0;
+        box-shadow: 0 18px 46px rgba(84,68,48,.11);
+        overflow: hidden;
+        touch-action: pan-y;
+        isolation: isolate;
+      }
+      .booklet-stage::after {
+        content: "";
+        position: absolute;
+        z-index: 7;
+        right: 0;
+        bottom: 0;
+        width: 38px;
+        height: 38px;
+        border-radius: 24px 0 0;
+        background: linear-gradient(135deg, rgba(219,207,187,.16) 0 48%, #e6d8c3 50%, #fffaf0 82%);
+        box-shadow: -4px -4px 9px rgba(77,62,45,.08);
+        pointer-events: none;
+        transform-origin: 100% 100%;
+        transition: transform .2s ease;
+      }
+      .booklet-stage.turning-next::after { transform: rotate(-13deg) translate(-4px,-3px); }
+      .booklet-stage.turning-prev::after { transform: rotate(9deg) translate(2px,2px); }
+      .book-page {
+        position: relative;
+        z-index: 1;
+        min-height: 460px;
+        padding: clamp(18px, 3.2vw, 36px);
+        background: rgba(255,250,240,.94);
+        animation: book-reveal .2s ease both;
+      }
+      .book-page::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        inset: 0;
+        background: #efe7d7;
+        filter: url(#paper-noise);
+        opacity: .10;
+        mix-blend-mode: multiply;
+        pointer-events: none;
+      }
+      @keyframes book-reveal { from { opacity: .45; transform: translateX(8px) rotate(.08deg); } to { opacity: 1; transform: none; } }
+      .booklet-stage.turning-prev .book-page { animation-name: book-reveal-prev; }
+      @keyframes book-reveal-prev { from { opacity: .45; transform: translateX(-8px) rotate(-.08deg); } to { opacity: 1; transform: none; } }
+      .book-wave-border { position: absolute; z-index: 6; inset: 6px; width: calc(100% - 12px); height: calc(100% - 12px); overflow: visible; pointer-events: none; }
+      .book-wave-border path { fill: none; stroke: rgba(122,139,92,.47); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+      .book-page-number {
+        position: absolute;
+        z-index: 8;
+        right: 24px;
+        bottom: 17px;
+        padding: 5px 8px;
+        border: 1px solid rgba(217,95,67,.48);
+        border-radius: 50%;
+        color: var(--vermilion);
+        background: rgba(255,250,240,.86);
+        font: 700 .72rem var(--font-sans);
+        letter-spacing: .03em;
+        transform: rotate(-7deg);
+      }
+      .book-page-content { min-width: 0; padding-bottom: 36px; }
+      .book-page-content > :first-child { margin-top: 0 !important; }
+      .book-page .profile { margin: 0 !important; }
+      .book-page .scrapbook-spread { display: block; margin: 0; }
+      .book-page .journal-page,
+      .book-page .daily-checkin { min-height: 0; margin: 0; }
+      .book-page .panel-top,
+      .book-page .records-hub,
+      .book-page .yearbook,
+      .book-page .archive-sections { margin-top: 16px; }
+      .book-page .panel-top { display: block; }
+      .book-page .photo-wall { width: 100%; }
+      .book-page .yearbook { display: block; }
+      .book-page .yearbook[hidden], .book-page .photo-wall[hidden] { display: none !important; }
+      .gallery-switch { display: inline-flex; gap: 4px; margin: 0 0 14px; padding: 4px; border-radius: 10px 7px 12px 8px; background: var(--surface-2); }
+      .gallery-switch button { padding: 8px 13px; border: 0; border-radius: 7px 10px 6px 9px; color: var(--muted); background: transparent; cursor: pointer; }
+      .gallery-switch button[aria-pressed="true"] { color: #fffaf0; background: var(--accent-deep); }
+      .gallery-switch button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+      .book-page .archive-sections { display: grid; }
+      .book-page .ai-health-review { margin: 16px 0 0; }
+      .dog-panel.yearbook-mode .booklet-stage,
+      .dog-panel.yearbook-mode .booklet-nav,
+      .dog-panel.yearbook-mode .book-tools,
+      .dog-panel.yearbook-mode .card-todos { display: initial; }
+
+      .booklet-pager {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 10px;
+        margin: 12px 0 26px;
+      }
+      .booklet-pager button {
+        min-height: 42px;
+        padding: 8px 12px;
+        border: 1px dashed rgba(122,139,92,.43);
+        border-radius: 8px 13px 7px 11px;
+        color: var(--accent-deep);
+        background: rgba(255,253,248,.76);
+        cursor: pointer;
+      }
+      .booklet-pager button:last-child { justify-self: end; }
+      .booklet-pager button:disabled { opacity: .35; cursor: default; }
+      .booklet-pager button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+      .page-dots { display: flex; gap: 7px; }
+      .page-dots button { width: 10px; min-height: 10px; height: 10px; padding: 0; border: 0; border-radius: 50%; background: #cfc6b8; }
+      .page-dots button[aria-current="page"] { background: var(--vermilion); box-shadow: 0 0 0 3px rgba(217,95,67,.13); }
+
+      /* 常驻的待办条，翻到任一页都看得到 */
+      .dog-panel > .card-todos {
+        margin: 0 0 12px;
+        padding: 14px 16px;
+        border: 1px dashed rgba(122,139,92,.37) !important;
+        border-radius: 11px 17px 10px 14px !important;
+        box-shadow: 0 7px 18px rgba(76,65,52,.05);
+      }
+      .dog-panel > .card-todos .todo-top { margin-bottom: 9px; }
+      .dog-panel > .card-todos .todo-list { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; }
+      .dog-panel > .card-todos .todo-item { min-height: 0; padding: 9px; }
+      .dog-panel > .card-todos .section-head h3 { position: relative; isolation: isolate; display: inline-block; padding: 5px 12px 5px 9px; }
+      .dog-panel > .card-todos .section-head h3::before { content: ""; position: absolute; z-index: -1; inset: 1px -4px 0 -6px; background: rgba(168,183,154,.56); clip-path: polygon(2% 8%,97% 0,100% 80%,96% 100%,3% 91%,0 25%); transform: rotate(-1.2deg); }
+
+      /* 标题纸胶带：薄荷、奶油、樱花粉轮换，撕边与轻微旋转 */
+      .book-page .section-head h3,
+      .book-page .module-head h3,
+      .book-page .scrapbook-head h3,
+      .book-page .stream-head h4,
+      .book-page .yearbook-copy h3 {
+        position: relative;
+        isolation: isolate;
+        display: inline-block;
+        padding: 5px 12px 5px 9px;
+      }
+      .book-page .section-head h3::before,
+      .book-page .module-head h3::before,
+      .book-page .scrapbook-head h3::before,
+      .book-page .stream-head h4::before,
+      .book-page .yearbook-copy h3::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        inset: 1px -4px 0 -6px;
+        background: rgba(168,183,154,.56);
+        clip-path: polygon(2% 8%,97% 0,100% 80%,96% 100%,3% 91%,0 25%);
+        transform: rotate(-1.2deg);
+      }
+      .book-page .archive-section:nth-child(3n+2) .section-head h3::before,
+      .book-page .records-module:nth-child(2) .module-head h3::before,
+      .book-page .stream:nth-child(2) .stream-head h4::before { background: rgba(255,243,191,.72); transform: rotate(1.1deg); }
+      .book-page .archive-section:nth-child(3n+3) .section-head h3::before,
+      .book-page .photo-wall .section-head h3::before { background: rgba(247,216,205,.7); transform: rotate(-1.6deg); }
+
+      /* 盖章式打卡 */
+      .daily-checkin { background: #f7e0dc !important; }
+      .checkin-progress { color: #a94734; font-weight: 800; }
+      .checkin-item { position: relative; grid-template-columns: 42px 1fr; min-height: 82px; overflow: visible; cursor: pointer; }
+      .checkin-item input { appearance: none; position: absolute; z-index: 5; inset: 0; width: 100%; height: 100%; margin: 0; border: 0; border-radius: inherit; opacity: 1; background: rgba(255,255,255,.001); cursor: pointer; }
+      .checkin-item:focus-within { outline: 3px solid rgba(217,95,67,.33); outline-offset: 2px; }
+      .daily-checkin .scrapbook-head h3 { line-height: 1.3; }
+      .task-icon { width: 40px; height: 40px; color: #6d7657 !important; background: transparent !important; border-radius: 0; }
+      .task-icon svg { width: 40px; height: 40px; stroke-width: 2; }
+      .stamp-mark {
+        position: absolute;
+        z-index: 3;
+        right: 5px;
+        bottom: 4px;
+        width: 52px;
+        height: 52px;
+        display: grid;
+        place-items: center;
+        border: 2px solid rgba(184,55,36,.83);
+        border-radius: 50%;
+        color: #b63a27;
+        background: rgba(255,250,240,.12);
+        font: 800 .78rem var(--font-serif);
+        letter-spacing: .08em;
+        opacity: 0;
+        transform: scale(1.7) rotate(-18deg);
+        pointer-events: none;
+      }
+      .stamp-mark::before { content: ""; position: absolute; inset: 4px; border: 1px dashed currentColor; border-radius: 50%; opacity: .72; }
+      .checkin-item:has(input:checked) { background: rgba(255,246,230,.8); opacity: 1; }
+      .checkin-item:has(input:checked) .stamp-mark { opacity: .84; transform: scale(1) rotate(-8deg); }
+      .checkin-item.is-stamping .stamp-mark { animation: stamp-drop .2s cubic-bezier(.2,.85,.3,1.15) both; }
+      @keyframes stamp-drop { 0% { opacity: 0; transform: scale(1.8) rotate(-22deg); } 72% { opacity: .96; transform: scale(.92) rotate(-6deg); } 100% { opacity: .84; transform: scale(1) rotate(-8deg); } }
+
+      .book-page .paw-border i { background: rgba(112,126,102,.16); }
+      .book-page .paw-border i::before { box-shadow: 5px -2px 0 rgba(112,126,102,.16), 10px 0 0 rgba(112,126,102,.16); }
+
+      @media (prefers-reduced-motion: reduce) {
+        .book-page, .booklet-stage.turning-prev .book-page, .checkin-item.is-stamping .stamp-mark { animation: none; }
+        .booklet-stage::after { transition: none; }
+      }
+      @media (max-width: 720px) {
+        .dog-panel > .card-todos .todo-list { grid-template-columns: 1fr; }
+        .booklet-stage, .book-page { min-height: 390px; }
+      }
+      @media (max-width: 520px) {
+        .book-tools { margin-top: 12px; }
+        .book-tools-label { max-width: 57%; line-height: 1.4; }
+        .booklet-nav { gap: 3px; padding: 5px; }
+        .booklet-nav button { min-height: 46px; padding: 7px 3px; }
+        .booklet-nav button span { display: none; }
+        .booklet-nav button strong { font-size: .68rem; }
+        .booklet-stage { border-radius: 22px 14px 24px 13px; }
+        .book-page { padding: 14px 10px; }
+        .book-page-number { right: 16px; bottom: 12px; }
+        .book-wave-border { inset: 4px; width: calc(100% - 8px); height: calc(100% - 8px); }
+        .booklet-pager { grid-template-columns: 1fr auto 1fr; }
+        .booklet-pager button { padding: 7px 9px; font-size: .74rem; }
+        .page-dots { gap: 5px; }
+        .checkin-item { grid-template-columns: 34px 1fr; min-height: 72px; padding: 8px 6px; }
+        .task-icon, .task-icon svg { width: 32px; height: 32px; }
+        .stamp-mark { right: 2px; bottom: 2px; width: 43px; height: 43px; font-size: .65rem; }
+        .book-page .archive-sections { grid-template-columns: 1fr !important; }
+        .book-page .profile { padding-right: 10px !important; padding-left: 10px !important; }
+      }
+
+      /* 加重版和纸胶带：全册区块标题共用同一组件，薄荷／奶油／樱花粉轮换。 */
+      :is(
+        .dog-panel > .card-todos .todo-top h3,
+        .book-page .section-head h3,
+        .book-page .module-head h3,
+        .book-page .scrapbook-head h3,
+        .book-page .stream-head h4,
+        .book-page .yearbook-copy h3,
+        .book-page .ai-health-head h3
+      ) {
+        position: relative;
+        isolation: isolate;
+        display: inline-block;
+        width: fit-content;
+        max-width: 100%;
+        padding: 7px 18px 7px 13px;
+      }
+      :is(
+        .dog-panel > .card-todos .todo-top h3,
+        .book-page .section-head h3,
+        .book-page .module-head h3,
+        .book-page .scrapbook-head h3,
+        .book-page .stream-head h4,
+        .book-page .yearbook-copy h3,
+        .book-page .ai-health-head h3
+      )::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        display: block !important;
+        inset: -1px -15px -2px -12px;
+        width: auto;
+        height: auto;
+        opacity: 1;
+        background: rgba(168,183,154,.94);
+        clip-path: polygon(0 20%,2% 9%,5% 15%,9% 5%,14% 12%,20% 3%,27% 10%,34% 2%,42% 9%,50% 1%,58% 8%,66% 2%,74% 10%,82% 3%,89% 11%,96% 4%,100% 18%,98% 32%,100% 46%,98% 60%,100% 75%,97% 90%,92% 96%,85% 90%,78% 98%,70% 91%,62% 99%,54% 92%,46% 100%,38% 92%,30% 99%,22% 91%,15% 98%,9% 90%,3% 96%,1% 82%,3% 68%,0 54%,2% 39%);
+        box-shadow: inset 0 0 0 1px rgba(85,101,72,.12), 0 2px 4px rgba(75,62,45,.08);
+        transform: rotate(-2.1deg);
+        transform-origin: 50% 50%;
+      }
+      :is(
+        .dog-panel > .card-todos .todo-top h3,
+        .book-page .section-head h3,
+        .book-page .module-head h3,
+        .book-page .stream-head h4,
+        .book-page .yearbook-copy h3
+      )::after { display: none !important; }
+      .book-page .archive-section:nth-child(3n+2) .section-head h3::before,
+      .book-page .records-module:nth-child(3n+2) .module-head h3::before,
+      .book-page .stream:nth-child(3n+2) .stream-head h4::before,
+      .book-page .yearbook-copy h3::before {
+        background: rgba(255,243,191,.96);
+        transform: rotate(2.2deg);
+      }
+      .book-page .archive-section:nth-child(3n+3) .section-head h3::before,
+      .book-page .records-module:nth-child(3n+3) .module-head h3::before,
+      .book-page .stream:nth-child(3n+3) .stream-head h4::before,
+      .book-page .photo-wall .section-head h3::before,
+      .book-page .daily-checkin .scrapbook-head h3::before {
+        background: rgba(247,216,205,.95);
+        transform: rotate(-2.6deg);
+      }
+      .book-page .journal-page .scrapbook-head h3::before,
+      .book-page .ai-health-head h3::before,
+      .dog-panel > .card-todos .todo-top h3::before {
+        background: rgba(168,183,154,.94);
+        transform: rotate(-2.1deg);
+      }
+
+      /* 头像与照片上的固定胶带同步加宽、加深，并强化撕边。 */
+      .washi-corner {
+        width: 72px;
+        height: 23px;
+        background: rgba(217,197,160,.94);
+        clip-path: polygon(0 22%,5% 6%,12% 14%,20% 3%,29% 12%,39% 2%,49% 10%,60% 1%,70% 11%,80% 3%,90% 13%,98% 5%,100% 80%,93% 96%,84% 88%,74% 98%,64% 89%,54% 99%,44% 90%,34% 98%,24% 88%,14% 97%,4% 87%);
+        box-shadow: inset 0 0 0 1px rgba(98,77,46,.10), 0 2px 4px rgba(75,62,45,.09);
+      }
+      .washi-corner.tape-tr { background: rgba(168,183,154,.93); }
+      .washi-corner.tape-bl { background: rgba(247,216,205,.94); }
+      .wall-photo .photo-tape {
+        top: -10px;
+        width: 84px;
+        height: 23px;
+        background: rgba(247,216,205,.93);
+        clip-path: polygon(0 20%,6% 5%,13% 14%,22% 3%,31% 12%,41% 2%,51% 10%,61% 1%,71% 11%,81% 3%,91% 13%,100% 5%,98% 82%,91% 96%,82% 88%,72% 98%,62% 89%,52% 99%,42% 90%,32% 98%,22% 88%,12% 97%,3% 87%);
+        box-shadow: inset 0 0 0 1px rgba(98,77,46,.08), 0 2px 4px rgba(75,62,45,.08);
+      }
+      .wall-photo:nth-child(2n) .photo-tape { background: rgba(255,243,191,.96); }
+      .wall-photo:nth-child(3n) .photo-tape { background: rgba(168,183,154,.94); }
+
+      @media (max-width: 520px) {
+        :is(
+          .dog-panel > .card-todos .todo-top h3,
+          .book-page .section-head h3,
+          .book-page .module-head h3,
+          .book-page .scrapbook-head h3,
+          .book-page .stream-head h4,
+          .book-page .yearbook-copy h3,
+          .book-page .ai-health-head h3
+        ) { padding: 6px 13px 6px 10px; }
+        :is(
+          .dog-panel > .card-todos .todo-top h3,
+          .book-page .section-head h3,
+          .book-page .module-head h3,
+          .book-page .scrapbook-head h3,
+          .book-page .stream-head h4,
+          .book-page .yearbook-copy h3,
+          .book-page .ai-health-head h3
+        )::before { inset: -1px -10px -2px -8px; }
+        .washi-corner { width: 58px; height: 19px; }
+        .wall-photo .photo-tape { width: 70px; height: 20px; }
+      }
+      @media (max-width: 390px) {
+        .washi-corner { width: 54px; height: 18px; }
+      }
     </style>
   </head>
   <body>
+    <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;overflow:hidden">
+      <filter id="paper-noise" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="2" seed="17" stitchTiles="stitch" result="grain" />
+        <feColorMatrix in="grain" type="saturate" values="0" result="gray" />
+        <feComponentTransfer in="gray"><feFuncA type="table" tableValues="0 .22" /></feComponentTransfer>
+      </filter>
+    </svg>
     <main class="shell">
       <header class="intro">
         <div>
@@ -3322,14 +3720,12 @@
         }
 
         function taskIcon(type) {
-          var images = {
-            meal: ['data:image/webp;base64,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', '一碗狗粮线描图标'],
-            water: ['data:image/webp;base64,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', '水滴线描图标'],
-            walk: ['data:image/webp;base64,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', '散步小狗线描图标']
-          };
-          if (images[type]) return '<img src="' + images[type][0] + '" alt="' + images[type][1] + '" loading="lazy">';
-          if (type === 'litter') return '<svg viewBox="0 0 36 36" aria-hidden="true"><rect x="8" y="15" width="20" height="13" rx="3"/><path d="M11 15l2-5 5 3 5-3 2 5M13 23c3 2 7 2 10 0"/></svg>';
-          return '<svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="18" fill="#f2b8a0" stroke="none"/><path d="M10 24c5-1 5-7 9-8 4-1 5 3 8 1"/><path d="M9 12h18M12 8v8M24 8v8"/><path d="M13 28h10"/></svg>';
+          if (type === 'snack') return '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M12.4 15.2c-1.5.2-3-1-3.2-2.5-.2-1.7 1.1-3.2 2.8-3.3 1 0 1.9.4 2.5 1.2l11.2 11.2c.8-.6 1.7-1 2.7-.9 1.7.1 3 1.6 2.8 3.3-.2 1.5-1.7 2.7-3.2 2.5.2 1.5-1 3-2.5 3.2-1.7.2-3.2-1.1-3.3-2.8 0-1 .3-1.9.9-2.7L11.9 13.2c-.7.5-1.6.8-2.5.7"/></svg>';
+          if (type === 'walk') return '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M9 12c7-5 14-3 16 3 2 5-2 10-7 8-3-1-3-5 0-6 5-2 10 2 11 8l1 6"/><path d="M9 12l-2 3M6 28c2-2 4-2 5 0s-1 4-3 4-4-2-2-4zM15 25c1.4-1.5 3.2-1.2 4 .3.8 1.6-.7 3.2-2.5 3.1-1.8-.1-2.9-2-1.5-3.4z"/></svg>';
+          if (type === 'weight') return '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M10 13h20l3 19H7l3-19z"/><path d="M14 13c0-4 2.7-6 6-6s6 2 6 6"/><path d="M20 17v6M20 17l4 2"/><path d="M12 27h16"/></svg>';
+          if (type === 'water') return '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 7C15 14 11 18 11 24a9 9 0 0 0 18 0c0-6-4-10-9-17z"/><path d="M15 25c.6 3 2.3 4.5 5 5"/></svg>';
+          if (type === 'litter') return '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 17h24l-3 15H11L8 17zM12 17l2-6 6 3 6-3 2 6M14 26c4 2 8 2 12 0"/></svg>';
+          return '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 27c6-1 6-9 12-10 6-1 7 5 12 2M10 11h20M14 7v8M26 7v8M14 32h12"/></svg>';
         }
 
         function doodleStrip() {
@@ -3354,23 +3750,139 @@
             return '<article class="date-card"><time' + (record.date ? ' datetime="' + esc(record.date) + '"' : '') + '>' + esc(dateText) + '</time><strong>' + esc(record.title) + '</strong><span>' + esc(record.text) + '</span></article>';
           }).join('');
           var tasks = item.species === 'cat' ? [
-            { type: 'meal', title: '主餐', note: '按当天份量' },
+            { type: 'snack', title: '零食', note: '从当天份量扣减' },
             { type: 'water', title: '饮水', note: '留意饮水状态' },
-            { type: 'litter', title: '猫砂', note: '观察排泄状态' },
-            { type: 'care', title: '梳毛护理', note: '观察皮毛状态' }
+            { type: 'weight', title: '体重记录', note: '按计划称重' },
+            { type: 'litter', title: '猫砂', note: '观察排泄状态' }
           ] : [
-            { type: 'meal', title: '主餐', note: '按当天份量' },
-            { type: 'water', title: '饮水', note: '留意饮水状态' },
+            { type: 'snack', title: '零食', note: '从当天份量扣减' },
             { type: 'walk', title: '散步', note: '完成日常活动' },
+            { type: 'weight', title: '体重记录', note: '按计划称重' },
             { type: 'care', title: '梳毛护理', note: '观察皮毛状态' }
           ];
           var taskCards = tasks.map(function (task, index) {
             var id = 'daily-' + key + '-' + index;
-            return '<label class="checkin-item" for="' + id + '"><span class="task-icon">' + taskIcon(task.type) + '</span><span class="checkin-copy"><strong>' + task.title + '</strong><small>' + task.note + '</small></span><input id="' + id + '" class="daily-check" type="checkbox" aria-label="标记' + esc(item.name + task.title) + '完成"></label>';
+            return '<label class="checkin-item" for="' + id + '"><span class="task-icon">' + taskIcon(task.type) + '</span><span class="checkin-copy"><strong>' + task.title + '</strong><small>' + task.note + '</small></span><input id="' + id + '" class="daily-check" type="checkbox" aria-label="为' + esc(item.name + task.title) + '盖完成章"><span class="stamp-mark" aria-hidden="true">完成</span></label>';
           }).join('');
           return '<section class="scrapbook-spread" aria-label="' + esc(item.name) + '的手帐记录">' +
             '<article class="journal-page"><div class="scrapbook-head"><div><h3>宠物成长记录页</h3><p>已确认的日期与成长片段</p></div>' + doodleStrip() + '</div><div class="growth-dates">' + dateCards + '</div><span class="paw-border" aria-hidden="true"><i></i><i></i><i></i></span></article>' +
-            '<article class="daily-checkin"><div class="scrapbook-head"><div><h3>日常任务打卡</h3><p>今天 · 勾选仅保留在本次打开</p></div><output class="checkin-progress" aria-live="polite">0 / 4</output></div><div class="checkin-grid">' + taskCards + '</div></article></section>';
+            '<article class="daily-checkin"><div class="scrapbook-head"><div><h3>日常任务盖章</h3><p>今天 · 盖章仅保留在本次打开</p></div><output class="checkin-progress" aria-live="polite">已盖 0/4</output></div><div class="checkin-grid">' + taskCards + '</div></article></section>';
+        }
+
+        function organizeBooklet(panel, item, key, originalPhotos) {
+          var tools = panel.querySelector('.book-tools');
+          var profile = panel.querySelector('.profile');
+          var scrapbook = panel.querySelector('.scrapbook-spread');
+          var journal = scrapbook && scrapbook.querySelector('.journal-page');
+          var checkin = scrapbook && scrapbook.querySelector('.daily-checkin');
+          var panelTop = panel.querySelector('.panel-top');
+          var todos = panelTop && panelTop.querySelector('.card-todos');
+          var wall = panelTop && panelTop.querySelector('.photo-wall');
+          var hub = panel.querySelector('.records-hub');
+          var archive = panel.querySelector('.archive-sections');
+          var aiReview = panel.querySelector('.ai-health-review');
+          var yearbook = panel.querySelector('.yearbook');
+          if (!tools || !profile || !scrapbook || !panelTop || !hub || !archive || !yearbook) return;
+
+          var heroImage = profile.querySelector('.profile-heading img');
+          var sharePhoto = originalPhotos.length ? originalPhotos[0].src : (heroImage && (heroImage.getAttribute('src') || heroImage.getAttribute('data-src')));
+          var today = new Date();
+          var shareDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+          if (sharePhoto) tools.insertAdjacentHTML('beforeend', '<button class="book-share share-trigger" type="button" data-name="' + esc(item.name) + '" data-date="' + shareDate + '" data-weekday="" data-text="' + esc(item.name + '的健康档案手帐') + '" data-photo="' + esc(sharePhoto) + '">生成分享卡</button>');
+
+          if (todos) panel.insertBefore(todos, tools.nextSibling);
+
+          var gallerySwitch = document.createElement('div');
+          gallerySwitch.className = 'gallery-switch';
+          gallerySwitch.setAttribute('aria-label', item.name + '相册年鉴查看方式');
+          gallerySwitch.innerHTML = '<button type="button" data-gallery-view="wall" aria-pressed="true">照片墙</button><button type="button" data-gallery-view="yearbook" aria-pressed="false">2026 年鉴</button>';
+          yearbook.hidden = true;
+
+          var fragments = [];
+          function collect(nodes) {
+            var fragment = document.createDocumentFragment();
+            nodes.forEach(function (node) { if (node) fragment.appendChild(node); });
+            return fragment;
+          }
+          fragments.push(collect([profile]));
+          fragments.push(collect([journal, hub]));
+          fragments.push(collect([checkin]));
+          fragments.push(collect([gallerySwitch, wall, yearbook]));
+          fragments.push(collect([archive, aiReview]));
+          scrapbook.remove();
+          panelTop.remove();
+
+          var labels = ['档案首页', '成长记录', '每日打卡', '相册年鉴', '状态记录'];
+          var nav = document.createElement('nav');
+          nav.className = 'booklet-nav';
+          nav.setAttribute('aria-label', item.name + '档案目录');
+          nav.innerHTML = labels.map(function (label, index) {
+            return '<button type="button" data-book-page="' + index + '"' + (index === 0 ? ' aria-current="page"' : '') + '><strong>P.' + (index + 1) + '</strong><span>' + label + '</span></button>';
+          }).join('');
+
+          var stage = document.createElement('section');
+          stage.className = 'booklet-stage';
+          stage.setAttribute('aria-label', item.name + '档案 P.1 档案首页');
+          stage.innerHTML = '<svg class="book-wave-border" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"><path d="M38 8 Q58 2 78 8 T118 8 T158 8 T198 8 T238 8 T278 8 T318 8 T358 8 T398 8 T438 8 T478 8 T518 8 T558 8 T598 8 T638 8 T678 8 T718 8 T758 8 T798 8 T838 8 T878 8 T918 8 Q968 4 992 40 Q998 60 992 80 T992 120 T992 160 T992 200 T992 240 T992 280 T992 320 T992 360 T992 400 T992 440 T992 480 T992 520 T992 560 T992 600 T992 640 T992 680 T992 720 T992 760 T992 800 T992 840 T992 880 T992 920 Q996 970 960 992 Q940 998 920 992 T880 992 T840 992 T800 992 T760 992 T720 992 T680 992 T640 992 T600 992 T560 992 T520 992 T480 992 T440 992 T400 992 T360 992 T320 992 T280 992 T240 992 T200 992 T160 992 T120 992 T80 992 Q30 996 8 960 Q2 940 8 920 T8 880 T8 840 T8 800 T8 760 T8 720 T8 680 T8 640 T8 600 T8 560 T8 520 T8 480 T8 440 T8 400 T8 360 T8 320 T8 280 T8 240 T8 200 T8 160 T8 120 T8 80 Q4 30 38 8Z"/></svg><article class="book-page" data-page="0"><div class="book-page-content"></div><span class="book-page-number" aria-hidden="true">P.1</span></article>';
+          var pageContent = stage.querySelector('.book-page-content');
+          pageContent.appendChild(fragments[0]);
+
+          var pager = document.createElement('div');
+          pager.className = 'booklet-pager';
+          pager.innerHTML = '<button type="button" data-book-step="-1" disabled>← 上一页</button><span class="page-dots" aria-label="页码点跳">' + labels.map(function (label, index) { return '<button type="button" data-book-page="' + index + '" aria-label="P.' + (index + 1) + ' ' + label + '"' + (index === 0 ? ' aria-current="page"' : '') + '></button>'; }).join('') + '</span><button type="button" data-book-step="1">下一页 →</button>';
+          panel.insertBefore(nav, tools.nextSibling === todos ? todos.nextSibling : tools.nextSibling);
+          nav.insertAdjacentElement('afterend', stage);
+          stage.insertAdjacentElement('afterend', pager);
+
+          var state = { current: 0, fragments: fragments, labels: labels, pageContent: pageContent, stage: stage };
+          panel._booklet = state;
+          function showPage(index, direction) {
+            index = Math.max(0, Math.min(labels.length - 1, index));
+            if (index === state.current) return;
+            while (pageContent.firstChild) state.fragments[state.current].appendChild(pageContent.firstChild);
+            state.current = index;
+            stage.classList.remove('turning-next', 'turning-prev');
+            stage.classList.add(direction < 0 ? 'turning-prev' : 'turning-next');
+            var page = stage.querySelector('.book-page');
+            page.dataset.page = String(index);
+            pageContent.appendChild(state.fragments[index]);
+            stage.querySelector('.book-page-number').textContent = 'P.' + (index + 1);
+            stage.setAttribute('aria-label', item.name + '档案 P.' + (index + 1) + ' ' + labels[index]);
+            panel.querySelectorAll('[data-book-page]').forEach(function (button) { if (Number(button.dataset.bookPage) === index) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current'); });
+            panel.querySelector('[data-book-step="-1"]').disabled = index === 0;
+            panel.querySelector('[data-book-step="1"]').disabled = index === labels.length - 1;
+            watchDeferredImages(pageContent);
+            window.setTimeout(function () { stage.classList.remove('turning-next', 'turning-prev'); }, 220);
+          }
+          panel.addEventListener('click', function (event) {
+            var galleryButton = event.target.closest('[data-gallery-view]');
+            if (galleryButton) {
+              var showYearbook = galleryButton.dataset.galleryView === 'yearbook';
+              wall.hidden = showYearbook;
+              yearbook.hidden = !showYearbook;
+              gallerySwitch.querySelectorAll('[data-gallery-view]').forEach(function (button) { button.setAttribute('aria-pressed', button === galleryButton ? 'true' : 'false'); });
+              watchDeferredImages(showYearbook ? yearbook : wall);
+              return;
+            }
+            var jump = event.target.closest('[data-book-page]');
+            if (jump) { showPage(Number(jump.dataset.bookPage), Number(jump.dataset.bookPage) < state.current ? -1 : 1); return; }
+            var step = event.target.closest('[data-book-step]');
+            if (step) showPage(state.current + Number(step.dataset.bookStep), Number(step.dataset.bookStep));
+          });
+          var startX = 0;
+          var startY = 0;
+          stage.addEventListener('touchstart', function (event) {
+            if (event.touches.length !== 1) return;
+            startX = event.touches[0].clientX;
+            startY = event.touches[0].clientY;
+          }, { passive: true });
+          stage.addEventListener('touchend', function (event) {
+            if (!event.changedTouches.length) return;
+            var dx = event.changedTouches[0].clientX - startX;
+            var dy = event.changedTouches[0].clientY - startY;
+            if (Math.abs(dx) < 54 || Math.abs(dx) <= Math.abs(dy)) return;
+            showPage(state.current + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
+          }, { passive: true });
         }
 
         function buildPanel(panel, key) {
@@ -3404,9 +3916,8 @@
           }
 
           var switcher = document.createElement('div');
-          switcher.className = 'view-switch';
-          switcher.setAttribute('aria-label', item.name + '查看方式');
-          switcher.innerHTML = '<button type="button" aria-pressed="true" data-panel-view="archive">档案</button><button type="button" aria-pressed="false" data-panel-view="yearbook">2026 年鉴</button>';
+          switcher.className = 'book-tools';
+          switcher.innerHTML = '<span class="book-tools-label">' + esc(item.name) + '的小册子 · 左右滑动翻页</span>';
           panel.insertBefore(switcher, panel.firstChild);
 
           var scrapbook = document.createElement('div');
@@ -3445,6 +3956,7 @@
             (originalPhotos.length ? originalPhotos.slice(0, 2).map(function (photo) { return '<img src="' + esc(photo.thumb || thumbnailFor(photo.src)) + '" data-full="' + esc(photo.src) + '" alt="' + esc(photo.alt) + '" loading="lazy">'; }).join('') : '<div class="module-empty">精选照片待记录</div>') +
             '</div></div><div class="yearbook-chart"><h4>全年体重曲线 · 共 ' + item.weights.length + ' 次称重</h4>' + chartMarkup(item, true) + '</div>';
           panel.appendChild(yearbook);
+          organizeBooklet(panel, item, key, originalPhotos);
           panel.dataset.panelBuilt = 'true';
         }
 
@@ -3468,9 +3980,16 @@
         document.addEventListener('change', function (event) {
           if (!event.target.classList.contains('daily-check')) return;
           var card = event.target.closest('.daily-checkin');
+          var item = event.target.closest('.checkin-item');
           var total = card.querySelectorAll('.daily-check').length;
           var done = card.querySelectorAll('.daily-check:checked').length;
-          card.querySelector('.checkin-progress').textContent = done + ' / ' + total;
+          card.querySelector('.checkin-progress').textContent = '已盖 ' + done + '/' + total;
+          if (event.target.checked && item) {
+            item.classList.remove('is-stamping');
+            item.offsetWidth;
+            item.classList.add('is-stamping');
+            window.setTimeout(function () { item.classList.remove('is-stamping'); }, 210);
+          }
         });
 
         document.addEventListener('click', function (event) {
