@@ -3586,6 +3586,7 @@
           zhouzhou: { name: '粥粥', birthday: '2020-03-05', homeDate: '', todos: [], weights: [
             { date: '2026-10-18', weekday: '星期日', weight: 10.1, note: '档案记录的现时体重，为当前最新已知数值。', photo: 'images/img_011.webp' }
           ], growth: [], health: [
+            { date: '2026-10-20', weekday: '星期二', text: '呕吐与皮肤：连续呕吐 3 天；臀部（PatPat）位置有皮肤病，脱落了一大片毛发。建议今日就医。' },
             { date: '2026-08-12', weekday: '', text: '完成洗澡；冲凉后需彻底吹干腋下与腹部。' }
           ] },
           tinny: { name: 'Tinny', species: 'cat', placeholder: true, birthday: '', homeDate: '', todos: [], weights: [], growth: [], health: [
@@ -3896,23 +3897,24 @@
           panelTop.remove();
 
           var labels = ['档案首页', '成长记录', '每日打卡', '相册年鉴', '状态记录'];
+          var pageTags = ['档案', '健康', '打卡', '相册', '状态'];
           var nav = document.createElement('nav');
           nav.className = 'booklet-nav';
           nav.setAttribute('aria-label', item.name + '档案目录');
           nav.innerHTML = labels.map(function (label, index) {
-            return '<button type="button" data-book-page="' + index + '"' + (index === 0 ? ' aria-current="page"' : '') + '><strong>P.' + (index + 1) + '</strong><span>' + label + '</span></button>';
+            return '<button type="button" data-book-page="' + index + '"' + (index === 0 ? ' aria-current="page"' : '') + '><strong>' + pageTags[index] + '</strong><span>' + label + '</span></button>';
           }).join('');
 
           var stage = document.createElement('section');
           stage.className = 'booklet-stage';
-          stage.setAttribute('aria-label', item.name + '档案 P.1 档案首页');
-          stage.innerHTML = '<svg class="book-wave-border" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"><path d="M38 8 Q58 2 78 8 T118 8 T158 8 T198 8 T238 8 T278 8 T318 8 T358 8 T398 8 T438 8 T478 8 T518 8 T558 8 T598 8 T638 8 T678 8 T718 8 T758 8 T798 8 T838 8 T878 8 T918 8 Q968 4 992 40 Q998 60 992 80 T992 120 T992 160 T992 200 T992 240 T992 280 T992 320 T992 360 T992 400 T992 440 T992 480 T992 520 T992 560 T992 600 T992 640 T992 680 T992 720 T992 760 T992 800 T992 840 T992 880 T992 920 Q996 970 960 992 Q940 998 920 992 T880 992 T840 992 T800 992 T760 992 T720 992 T680 992 T640 992 T600 992 T560 992 T520 992 T480 992 T440 992 T400 992 T360 992 T320 992 T280 992 T240 992 T200 992 T160 992 T120 992 T80 992 Q30 996 8 960 Q2 940 8 920 T8 880 T8 840 T8 800 T8 760 T8 720 T8 680 T8 640 T8 600 T8 560 T8 520 T8 480 T8 440 T8 400 T8 360 T8 320 T8 280 T8 240 T8 200 T8 160 T8 120 T8 80 Q4 30 38 8Z"/></svg><article class="book-page" data-page="0"><div class="book-page-content"></div><span class="book-page-number" aria-hidden="true">P.1</span></article>';
+          stage.setAttribute('aria-label', item.name + '档案 档案 档案首页');
+          stage.innerHTML = '<svg class="book-wave-border" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"><path d="M38 8 Q58 2 78 8 T118 8 T158 8 T198 8 T238 8 T278 8 T318 8 T358 8 T398 8 T438 8 T478 8 T518 8 T558 8 T598 8 T638 8 T678 8 T718 8 T758 8 T798 8 T838 8 T878 8 T918 8 Q968 4 992 40 Q998 60 992 80 T992 120 T992 160 T992 200 T992 240 T992 280 T992 320 T992 360 T992 400 T992 440 T992 480 T992 520 T992 560 T992 600 T992 640 T992 680 T992 720 T992 760 T992 800 T992 840 T992 880 T992 920 Q996 970 960 992 Q940 998 920 992 T880 992 T840 992 T800 992 T760 992 T720 992 T680 992 T640 992 T600 992 T560 992 T520 992 T480 992 T440 992 T400 992 T360 992 T320 992 T280 992 T240 992 T200 992 T160 992 T120 992 T80 992 Q30 996 8 960 Q2 940 8 920 T8 880 T8 840 T8 800 T8 760 T8 720 T8 680 T8 640 T8 600 T8 560 T8 520 T8 480 T8 440 T8 400 T8 360 T8 320 T8 280 T8 240 T8 200 T8 160 T8 120 T8 80 Q4 30 38 8Z"/></svg><article class="book-page" data-page="0"><div class="book-page-content"></div><span class="book-page-number" aria-hidden="true">档案</span></article>';
           var pageContent = stage.querySelector('.book-page-content');
           pageContent.appendChild(fragments[0]);
 
           var pager = document.createElement('div');
           pager.className = 'booklet-pager';
-          pager.innerHTML = '<button type="button" data-book-step="-1" disabled>← 上一页</button><span class="page-dots" aria-label="页码点跳">' + labels.map(function (label, index) { return '<button type="button" data-book-page="' + index + '" aria-label="P.' + (index + 1) + ' ' + label + '"' + (index === 0 ? ' aria-current="page"' : '') + '></button>'; }).join('') + '</span><button type="button" data-book-step="1">下一页 →</button>';
+          pager.innerHTML = '<button type="button" data-book-step="-1" disabled>← 上一页</button><span class="page-dots" aria-label="页码点跳">' + labels.map(function (label, index) { return '<button type="button" data-book-page="' + index + '" aria-label="' + pageTags[index] + ' ' + label + '"' + (index === 0 ? ' aria-current="page"' : '') + '></button>'; }).join('') + '</span><button type="button" data-book-step="1">下一页 →</button>';
           panel.insertBefore(nav, tools.nextSibling === todos ? todos.nextSibling : tools.nextSibling);
           nav.insertAdjacentElement('afterend', stage);
           stage.insertAdjacentElement('afterend', pager);
@@ -3929,8 +3931,8 @@
             var page = stage.querySelector('.book-page');
             page.dataset.page = String(index);
             pageContent.appendChild(state.fragments[index]);
-            stage.querySelector('.book-page-number').textContent = 'P.' + (index + 1);
-            stage.setAttribute('aria-label', item.name + '档案 P.' + (index + 1) + ' ' + labels[index]);
+            stage.querySelector('.book-page-number').textContent = pageTags[index];
+            stage.setAttribute('aria-label', item.name + '档案 ' + pageTags[index] + ' ' + labels[index]);
             panel.querySelectorAll('[data-book-page]').forEach(function (button) { if (Number(button.dataset.bookPage) === index) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current'); });
             panel.querySelector('[data-book-step="-1"]').disabled = index === 0;
             panel.querySelector('[data-book-step="1"]').disabled = index === labels.length - 1;
